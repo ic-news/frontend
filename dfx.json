@@ -1,0 +1,21 @@
+{
+  "canisters": {
+    "ic-news-frontend": {
+      "source": ["build"],
+      "type": "assets"
+    },
+    "ic-news-frontend-wallet": {
+      "type": "custom",
+      "wasm": "",
+      "candid": ""
+    }
+  },
+  "defaults": {
+    "build": {
+      "args": "",
+      "packtool": ""
+    }
+  },
+  "output_env_file": ".env",
+  "version": 1
+}
