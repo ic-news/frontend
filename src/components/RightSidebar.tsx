@@ -204,6 +204,7 @@ interface ChartComponentProps {
 function ChartComponent({ data, color }: ChartComponentProps) {
   const chartRef = useRef<HTMLDivElement>(null);
   const chartInstance = useRef<any>(null);
+  const { darkMode } = useTheme();
 
   useEffect(() => {
     const initChart = () => {
@@ -226,6 +227,16 @@ function ChartComponent({ data, color }: ChartComponentProps) {
             },
             toolbar: {
               show: false,
+            },
+            background: "transparent",
+            parentHeightOffset: 0,
+          },
+          grid: {
+            padding: {
+              left: 0,
+              right: 0,
+              top: 0,
+              bottom: 0,
             },
           },
           series: [
@@ -294,9 +305,9 @@ function ChartComponent({ data, color }: ChartComponentProps) {
         chartInstance.current.destroy();
       }
     };
-  }, [data, color]);
+  }, [data, color, darkMode]);
 
-  return <div ref={chartRef} />;
+  return <div ref={chartRef} className="bg-transparent" />;
 }
 
 export default function RightSidebar() {

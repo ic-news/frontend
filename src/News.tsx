@@ -15,8 +15,7 @@ import { Copy } from "./components/ui/copy";
 import { HoverCard, HoverCardContent, HoverCardTrigger } from "./components/ui/hover-card";
 import { Loading } from "./components/ui/loading";
 import { useNotification } from "./context/NotificationContext";
-import type { News } from "./hooks/useNewsCanister";
-import { useNews } from "./hooks/useNewsCanister";
+import { Feeds, useFeeds } from "./hooks/useNewsCanister";
 import { abbreviateAddress, classNames } from "./utils";
 
 // Container Component
@@ -48,7 +47,7 @@ function ICNewsApp({
   activeTab: string;
   setActiveTab: (tab: string) => void;
 }) {
-  const { news, loadNextPage, hasNextPage } = useNews();
+  const { news, loadNextPage, hasNextPage } = useFeeds();
   const { hasPermission, requestPermission, sendNotification } = useNotification();
   useEffect(() => {
     if (!hasPermission) {
@@ -125,7 +124,7 @@ function ICNewsApp({
             className="px-3 md:px-6 space-y-3 h-full relative"
             scrollableTarget="scrollableDiv"
           >
-            {news.map((item: News, itemIdx: number) => {
+            {news.map((item: Feeds, itemIdx: number) => {
               const channel = item?.metadata?.channel;
               const sender = item?.provider?.alias || "IC.News";
               const platform = item?.metadata?.platform;

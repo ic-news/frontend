@@ -18,11 +18,14 @@ export const ThemeProvider: React.FC<{ children: React.ReactNode }> = ({ childre
       (!savedTheme && window.matchMedia("(prefers-color-scheme: dark)").matches)
     );
   });
-
+  useEffect(() => {
+    document
+      .querySelector('meta[name="theme-color"]')
+      ?.setAttribute("content", "var(--bg-color-primary)");
+  }, []);
   useEffect(() => {
     // Update localStorage when theme changes
     localStorage.setItem("theme", darkMode ? "dark" : "light");
-
     // Update document class for Tailwind dark mode
     if (darkMode) {
       document.documentElement.setAttribute("data-theme", "dark");
