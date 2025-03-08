@@ -19,12 +19,12 @@ import { Feeds, useFeeds } from "./hooks/useNewsCanister";
 import { abbreviateAddress, classNames } from "./utils";
 
 // Container Component
-export default function ICNewsAppContainer() {
+export default function FlashNewsContainer() {
   const [activeTab, setActiveTab] = useState("For You");
 
   const tabs = ["Following", "WatchList Updates", "For You", "Trending Today", "Market"];
 
-  return <ICNewsApp tabs={tabs} activeTab={activeTab} setActiveTab={setActiveTab} />;
+  return <FlashNews tabs={tabs} activeTab={activeTab} setActiveTab={setActiveTab} />;
 }
 export const platformImages: { [key: string]: string } = {
   telegram: Telegram,
@@ -38,7 +38,7 @@ export const verifyChannel: { [key: string]: string } = {
   "ic.news": IcNews,
 };
 // UI Component
-function ICNewsApp({
+function FlashNews({
   tabs,
   activeTab,
   setActiveTab,

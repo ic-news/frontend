@@ -14,78 +14,75 @@ import { classNames, getFirstNonZeroDecimalPosition } from "../utils";
 export function ICEcosystemTokens() {
   const { tokens } = useICPTokens();
   return (
-    <div>
+    <div className="space-y-4">
       <h2 className="font-bold mb-4 text-[var(--text-color-primary)]">ICP Ecosystem Tokens</h2>
-      <div className="space-y-4">
-        {tokens.slice(0, 5).map((token: TOKEN, index: number) => {
-          const usd = new BigNumber(token.metrics.price.usd).toNumber();
-          const decimals = getFirstNonZeroDecimalPosition(usd);
-          const change24_usd = new BigNumber(token.metrics.change["24h"].usd).toNumber();
-          return (
-            <div key={token.id} className="flex items-center justify-between">
-              <div className="flex items-center">
-                <img
-                  src={`https://web2.icptokens.net/storage/${token.logo}`}
-                  alt={token.name}
-                  className="w-6 h-6 xl:w-8 xl:h-8 bg-gray-200 rounded-full mr-2"
-                />
-                <div>
-                  <div
-                    className="font-medium text-[var(--text-color-primary)] flex items-center gap-1 whitespace-nowrap"
-                    translate="no"
-                  >
-                    {token.symbol}
-                    <CountUp
-                      className={classNames(
-                        "text-xs",
-                        change24_usd > 0 ? "text-[var(--green)]" : "text-[var(--red)]"
-                      )}
-                      end={new BigNumber(usd).toNumber()}
-                      decimals={decimals}
-                      prefix="$"
-                      preserveValue={true}
-                      enableScrollSpy={false}
-                    />
-                    <CountUp
-                      className={classNames(
-                        "text-xs flex",
-                        change24_usd > 0 ? "text-[var(--green)]" : "text-[var(--red)]"
-                      )}
-                      end={Math.abs(new BigNumber(change24_usd).toNumber())}
-                      decimals={2}
-                      prefix={change24_usd > 0 ? "↑" : "↓"}
-                      suffix="%"
-                      preserveValue={true}
-                      enableScrollSpy={false}
-                    />
-                  </div>
-                  {token.name && (
-                    <div className="text-xs text-[var(--text-color-secondary)]">{token.name}</div>
-                  )}
+      {tokens.slice(0, 5).map((token: TOKEN, index: number) => {
+        const usd = new BigNumber(token.metrics.price.usd).toNumber();
+        const decimals = getFirstNonZeroDecimalPosition(usd);
+        const change24_usd = new BigNumber(token.metrics.change["24h"].usd).toNumber();
+        return (
+          <div key={token.id} className="flex items-center justify-between">
+            <div className="flex items-center">
+              <img
+                src={`https://web2.icptokens.net/storage/${token.logo}`}
+                alt={token.name}
+                className="w-6 h-6 xl:w-8 xl:h-8 bg-gray-200 rounded-full mr-2"
+              />
+              <div>
+                <div
+                  className="font-medium text-[var(--text-color-primary)] flex items-center gap-1 whitespace-nowrap"
+                  translate="no"
+                >
+                  {token.symbol}
+                  <CountUp
+                    className={classNames(
+                      "text-xs",
+                      change24_usd > 0 ? "text-[var(--green)]" : "text-[var(--red)]"
+                    )}
+                    end={new BigNumber(usd).toNumber()}
+                    decimals={decimals}
+                    prefix="$"
+                    preserveValue={true}
+                    enableScrollSpy={false}
+                  />
+                  <CountUp
+                    className={classNames(
+                      "text-xs flex",
+                      change24_usd > 0 ? "text-[var(--green)]" : "text-[var(--red)]"
+                    )}
+                    end={Math.abs(new BigNumber(change24_usd).toNumber())}
+                    decimals={2}
+                    prefix={change24_usd > 0 ? "↑" : "↓"}
+                    suffix="%"
+                    preserveValue={true}
+                    enableScrollSpy={false}
+                  />
                 </div>
-              </div>
-              <div
-                className={classNames(
-                  "text-right",
-                  token.metrics.change["24h"].usd > 0 ? "text-[var(--green)]" : "text-[var(--red)]"
-                )}
-              >
-                {token?.metrics?.chartLast7Days?.["USD"] && (
-                  <div className="w-[22.2222222222%] min-w-[80px]">
-                    <ChartComponent
-                      data={
-                        token?.metrics?.chartLast7Days?.["USD"]?.map((item: any) => item.price) ||
-                        []
-                      }
-                      color={change24_usd > 0 ? "var(--green)" : "var(--red)"}
-                    />
-                  </div>
+                {token.name && (
+                  <div className="text-xs text-[var(--text-color-secondary)]">{token.name}</div>
                 )}
               </div>
             </div>
-          );
-        })}
-      </div>
+            <div
+              className={classNames(
+                "text-right",
+                token.metrics.change["24h"].usd > 0 ? "text-[var(--green)]" : "text-[var(--red)]"
+              )}
+            >
+              {token?.metrics?.chartLast7Days?.["USD"] && (
+                <div className="w-[22.2222222222%] min-w-[80px]">
+                  <ChartComponent
+                    data={
+                      token?.metrics?.chartLast7Days?.["USD"]?.map((item: any) => item.price) || []
+                    }
+                    color={change24_usd > 0 ? "var(--green)" : "var(--red)"}
+                  />
+                </div>
+              )}
+            </div>
+          </div>
+        );
+      })}
     </div>
   );
 }
@@ -93,68 +90,66 @@ export function ICEcosystemTokens() {
 export function MarketOverview() {
   const { listings } = useTopCryptoListings(5, false);
   return (
-    <div className="mb-8">
+    <div className="space-y-4 md:mb-8">
       <h2 className="font-bold mb-4 text-[var(--text-color-primary)]">Market Overview</h2>
-      <div className="space-y-4">
-        {listings.map((listing: Listing) => {
-          const getFirstNonZeroDecimalPosition = (num: number): number => {
-            const decimalPart = String(num).split(".")[1];
-            if (!decimalPart) return 2;
-            for (let i = 0; i < decimalPart.length; i++) {
-              if (decimalPart[i] !== "0") {
-                return i + 2;
-              }
+      {listings.map((listing: Listing) => {
+        const getFirstNonZeroDecimalPosition = (num: number): number => {
+          const decimalPart = String(num).split(".")[1];
+          if (!decimalPart) return 2;
+          for (let i = 0; i < decimalPart.length; i++) {
+            if (decimalPart[i] !== "0") {
+              return i + 2;
             }
-            return 2;
-          };
-          const price = new BigNumber(listing.quote.price).toNumber();
-          const decimals = getFirstNonZeroDecimalPosition(price);
-          const percent_change_24h = new BigNumber(listing.quote.percent_change_24h).toNumber();
-          return (
-            <div key={listing.symbol} className="flex items-center justify-between">
-              <div className="flex items-center">
-                <img
-                  src={`https://s2.coinmarketcap.com/static/img/coins/64x64/${listing.id}.png`}
-                  alt={listing.name}
-                  className="w-6 h-6 xl:w-8 xl:h-8 bg-gray-200 rounded-full mr-2"
-                />
-                <div>
-                  <div className="font-medium text-[var(--text-color-primary)]" translate="no">
-                    {listing.symbol}
-                  </div>
-                  <div className="text-xs text-[var(--text-color-secondary)]">{listing.name}</div>
+          }
+          return 2;
+        };
+        const price = new BigNumber(listing.quote.price).toNumber();
+        const decimals = getFirstNonZeroDecimalPosition(price);
+        const percent_change_24h = new BigNumber(listing.quote.percent_change_24h).toNumber();
+        return (
+          <div key={listing.symbol} className="flex items-center justify-between">
+            <div className="flex items-center">
+              <img
+                src={`https://s2.coinmarketcap.com/static/img/coins/64x64/${listing.id}.png`}
+                alt={listing.name}
+                className="w-6 h-6 xl:w-8 xl:h-8 bg-gray-200 rounded-full mr-2"
+              />
+              <div>
+                <div className="font-medium text-[var(--text-color-primary)]" translate="no">
+                  {listing.symbol}
                 </div>
-              </div>
-              <div
-                className={classNames(
-                  "text-right",
-                  listing.quote.percent_change_24h > 0 ? "text-[var(--green)]" : "text-[var(--red)]"
-                )}
-              >
-                <CountUp
-                  className={"text-sm"}
-                  end={new BigNumber(listing.quote.price).toNumber()}
-                  decimals={decimals}
-                  preserveValue={true}
-                  enableScrollSpy={false}
-                />
-                <CountUp
-                  className={classNames(
-                    "flex justify-end text-sm",
-                    percent_change_24h > 0 ? "text-[var(--green)]" : "text-[var(--red)]"
-                  )}
-                  end={Math.abs(new BigNumber(percent_change_24h).toNumber())}
-                  decimals={decimals}
-                  prefix={percent_change_24h > 0 ? "↑" : "↓"}
-                  suffix={"%"}
-                  preserveValue={true}
-                  enableScrollSpy={false}
-                />
+                <div className="text-xs text-[var(--text-color-secondary)]">{listing.name}</div>
               </div>
             </div>
-          );
-        })}
-      </div>
+            <div
+              className={classNames(
+                "text-right",
+                listing.quote.percent_change_24h > 0 ? "text-[var(--green)]" : "text-[var(--red)]"
+              )}
+            >
+              <CountUp
+                className={"text-sm"}
+                end={new BigNumber(listing.quote.price).toNumber()}
+                decimals={decimals}
+                preserveValue={true}
+                enableScrollSpy={false}
+              />
+              <CountUp
+                className={classNames(
+                  "flex justify-end text-sm",
+                  percent_change_24h > 0 ? "text-[var(--green)]" : "text-[var(--red)]"
+                )}
+                end={Math.abs(new BigNumber(percent_change_24h).toNumber())}
+                decimals={decimals}
+                prefix={percent_change_24h > 0 ? "↑" : "↓"}
+                suffix={"%"}
+                preserveValue={true}
+                enableScrollSpy={false}
+              />
+            </div>
+          </div>
+        );
+      })}
       {/* <button className="w-full text-center text-gray-500 mt-4">More</button> */}
     </div>
   );
@@ -162,7 +157,7 @@ export function MarketOverview() {
 
 export function SocialLinks() {
   return (
-    <div className="mt-8 border border-[var(--border-color)] dark:border-gray-800 rounded-lg overflow-hidden mt-auto">
+    <div className="mt-8 border border-[var(--border-color)] dark:border-gray-800 rounded-lg overflow-hidden lg:mt-auto flex-shrink-0 md:mt-8">
       <h2 className="px-4 pt-3 font-bold text-[var(--text-color-primary)]">Follow Us</h2>
       <div className="py-4 flex items-center">
         <a
@@ -335,7 +330,7 @@ export default function RightSidebar() {
             <PanelLeftClose className={classNames(darkMode ? "stroke-white" : "", "w-5 h-5")} />
           )}
         </button>
-        <div className="overflow-y-auto h-full p-3 xl:p-4 flex flex-col">
+        <div className="overflow-y-auto h-full p-3 xl:p-4 flex flex-col max-md:space-y-4">
           <MarketOverview />
           <ICEcosystemTokens />
           <SocialLinks />

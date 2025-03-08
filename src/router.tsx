@@ -1,8 +1,8 @@
 import { createBrowserRouter, RouteObject } from "react-router-dom";
 import App from "./App";
 import Details from "./Details";
+import FlashNews from "./FlashNews";
 import Home from "./Home";
-import News from "./News";
 import NotFound from "./components/NotFound";
 
 const routes: RouteObject[] = [
@@ -15,9 +15,9 @@ const routes: RouteObject[] = [
         element: <Home />,
       },
       {
-        path: "/news",
+        path: "/flash-news",
         index: true,
-        element: <News />,
+        element: <FlashNews />,
       },
       {
         path: "news/:id",

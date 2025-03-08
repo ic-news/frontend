@@ -1,5 +1,5 @@
 import { useTheme } from "@/context/ThemeContext";
-import { Home, Moon, Rss, Sun } from "lucide-react";
+import { Home, Moon, Sun, Zap } from "lucide-react";
 import { Link, useLocation } from "react-router-dom";
 import logo from "../assets/logo.svg";
 import { classNames } from "../utils";
@@ -12,7 +12,7 @@ interface NavItem {
 }
 const navItems: NavItem[] = [
   { icon: Home, label: "Home", badge: "", router: "/" },
-  { icon: Rss, label: "News", badge: "", router: "/news" },
+  { icon: Zap, label: "Flash News", badge: "", router: "/flash-news" },
 ];
 export function Theme({ className }: { className: string }) {
   const { darkMode, toggleDarkMode } = useTheme();
