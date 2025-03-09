@@ -33,10 +33,10 @@ const NewsDetail: React.FC = () => {
       });
   }, [id]);
   const provider = item?.provider;
-  const channel = item?.metadata?.channel;
+  const channel = item?.metadata?.channel.replace(" News", "").replace(".com", "");
   const sender = item?.provider?.alias || "IC.News";
-  const platform = item?.metadata?.platform;
-  console.log(channel, platform, sender, "-channel");
+  const platform = item?.metadata?.platform.replace(" News", "").replace(".com", "");
+  console.log(item, platform, sender, "-channel");
   return (
     <div className={`max-w-7xl mx-auto min-h-screen`}>
       <Breadcrumb
@@ -135,7 +135,9 @@ const NewsDetail: React.FC = () => {
           </div>
           <div
             className={`prose max-w-none text-[var(--text-color-primary)] mb-8 leading-relaxed whitespace-pre-line [&_a]:text-blue-500 [&_a]:hover:underline`}
-            dangerouslySetInnerHTML={{ __html: (item?.description ?? "").replace(/\n/g, "<br />") }}
+            dangerouslySetInnerHTML={{
+              __html: (item?.content ?? item?.description ?? "").replace(/\n/g, "<br />"),
+            }}
           />
           <div className="border-t border-[--border-color] pt-8">
             <h3 className={`text-xl font-bold text-[var(--text-color-primary)] mb-6`}>

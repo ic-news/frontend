@@ -38,6 +38,19 @@ interface Metadata {
   verified: boolean;
 
   sender: string;
+  podcastDuration: string;
+  podcastExplicit: boolean;
+  podcastSubtitle: string;
+  podcastEpisodeType: string;
+  podcastTitle: string;
+  description: string;
+  website: string;
+  contentSnippet: string;
+  language: string;
+  weight: string;
+  sign: string;
+  appPush: boolean;
+  atomUpdated: string;
 }
 interface Provider {
   pid: string;
@@ -95,7 +108,20 @@ const convertMetadata = (value: Value): Metadata => {
       authorId: getValueText(metadataMap.get("authorId")),
       authorName: getValueText(metadataMap.get("authorName")),
       verified: getValueBool(metadataMap.get("verified")),
-      sender: "",
+      podcastDuration: getValueText(metadataMap.get("podcastDuration")),
+      podcastExplicit: getValueBool(metadataMap.get("podcastExplicit")),
+      podcastSubtitle: getValueText(metadataMap.get("podcastSubtitle")),
+      podcastEpisodeType: getValueText(metadataMap.get("podcastEpisodeType")),
+      podcastTitle: getValueText(metadataMap.get("podcastTitle")),
+      description: getValueText(metadataMap.get("description")),
+      website: getValueText(metadataMap.get("website")),
+      contentSnippet: getValueText(metadataMap.get("contentSnippet")),
+      language: getValueText(metadataMap.get("language")),
+      weight: getValueText(metadataMap.get("weight")),
+      sign: getValueText(metadataMap.get("sign")),
+      appPush: getValueBool(metadataMap.get("appPush")),
+      atomUpdated: getValueText(metadataMap.get("atomUpdated")),
+      sender: getValueText(metadataMap.get("sender")),
     };
   }
   throw new Error("Invalid metadata format");

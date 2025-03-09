@@ -5,10 +5,15 @@ import { QRCodeCanvas } from "qrcode.react";
 import { useEffect, useRef, useState } from "react";
 import InfiniteScroll from "react-infinite-scroll-component";
 import { Link } from "react-router-dom";
+import coingape from "./assets/images/coingape.png";
+import cointelegraph from "./assets/images/cointelegraph.png";
+import decrypt from "./assets/images/decrypt.png";
 import ICExplorer from "./assets/images/ic-explorer.svg";
+import IcNews from "./assets/images/ic.news.svg";
+import libsyn from "./assets/images/libsyn.png";
+import panewslab from "./assets/images/panewslab.png";
 import Telegram from "./assets/images/telegram.svg";
 import X from "./assets/images/x.svg";
-import IcNews from "./assets/logo.svg";
 import { Badge } from "./components/ui/badge";
 import { Button } from "./components/ui/button";
 import { Copy } from "./components/ui/copy";
@@ -18,7 +23,6 @@ import { useNotification } from "./context/NotificationContext";
 import type { News } from "./hooks/useNewsCanister";
 import { useNews } from "./hooks/useNewsCanister";
 import { abbreviateAddress } from "./utils";
-
 // Container Component
 export default function ICNewsAppContainer() {
   const [activeTab, setActiveTab] = useState("For You");
@@ -31,12 +35,19 @@ export const platformImages: { [key: string]: string } = {
   telegram: Telegram,
   x: X,
   ICExplorer: ICExplorer,
+  CoinGape: coingape,
+  Cointelegraph: cointelegraph,
+  decrypt,
+  libsyn,
+  PANews: panewslab,
 };
 export const alias: { [key: string]: string } = {
   "ic.news": "IC.News",
+  "IC.News": "IC.News",
 };
 export const verifyChannel: { [key: string]: string } = {
   "ic.news": IcNews,
+  "IC.News": IcNews,
 };
 // UI Component
 function ICNewsApp({
@@ -123,9 +134,9 @@ function ICNewsApp({
             scrollableTarget="scrollableDiv"
           >
             {news.map((item: News, itemIdx: number) => {
-              const channel = item?.metadata?.channel;
+              const channel = item?.metadata?.channel.replace(" News", "").replace(".com", "");
               const sender = item?.provider?.alias || "IC.News";
-              const platform = item?.metadata?.platform;
+              const platform = item?.metadata?.platform.replace(" News", "").replace(".com", "");
               return (
                 <Link
                   to={`/news/${item.hash}`}
