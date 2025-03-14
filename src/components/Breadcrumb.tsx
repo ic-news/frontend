@@ -29,17 +29,17 @@ export default function Breadcrumb({ items = [] }: BreadcrumbProps) {
 
   return (
     <nav className="flex py-3 px-3" aria-label="Breadcrumb">
-      <ol className="inline-flex items-center">
+      <ol className="inline-flex w-full">
         {breadcrumbItems.map((item, index) => (
-          <li key={item.path} className="inline-flex items-center">
+          <li key={item.path} className="inline-flex items-start">
             {index > 0 && (
               <ChevronRight
-                className={`mx-2 h-3 w-3 ${darkMode ? "text-gray-400" : "text-gray-500"}`}
+                className={`mx-2 mt-1 h-3 w-3 ${darkMode ? "text-gray-400" : "text-gray-500"}`}
               />
             )}
             <Link
               to={item?.path || ""}
-              className={`inline-flex line-clamp-1 whitespace-nowrap items-center ${
+              className={`inline-flex line-clamp-2 items-center ${
                 location.pathname === (item?.path || "")
                   ? darkMode
                     ? "text-gray-100"

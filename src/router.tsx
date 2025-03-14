@@ -1,7 +1,7 @@
 import { createBrowserRouter, RouteObject } from "react-router-dom";
 import App from "./App";
 import Details from "./Details";
-import FlashNews from "./FlashNews";
+import Flash from "./Flash";
 import Home from "./Home";
 import NotFound from "./components/NotFound";
 
@@ -15,12 +15,16 @@ const routes: RouteObject[] = [
         element: <Home />,
       },
       {
-        path: "/flash-news",
-        index: true,
-        element: <FlashNews />,
+        path: "/news/:id",
+        element: <Details />,
       },
       {
-        path: "news/:id",
+        path: "/flash",
+        index: true,
+        element: <Flash />,
+      },
+      {
+        path: "/flash/:id",
         element: <Details />,
       },
       {

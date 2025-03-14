@@ -12,7 +12,7 @@ interface NavItem {
 }
 const navItems: NavItem[] = [
   { icon: Home, label: "Home", badge: "", router: "/" },
-  { icon: Zap, label: "Flash News", badge: "", router: "/flash-news" },
+  { icon: Zap, label: "News Flash", badge: "", router: "/flash" },
 ];
 export function Theme({ className }: { className: string }) {
   const { darkMode, toggleDarkMode } = useTheme();

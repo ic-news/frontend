@@ -3,11 +3,6 @@
     "ic-news-frontend": {
       "source": ["build"],
       "type": "assets"
-    },
-    "ic-news-frontend-wallet": {
-      "type": "custom",
-      "wasm": "",
-      "candid": ""
     }
   },
   "defaults": {

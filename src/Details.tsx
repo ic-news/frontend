@@ -3,19 +3,32 @@
 import { formatInTimeZone } from "date-fns-tz";
 import { QRCodeCanvas } from "qrcode.react";
 import React, { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
-import Breadcrumb from "./components/Breadcrumb";
+import { useLocation, useMatch, useParams } from "react-router-dom";
 import { Badge } from "./components/ui/badge";
+import {
+  Breadcrumb,
+  BreadcrumbItem,
+  BreadcrumbLink,
+  BreadcrumbList,
+  BreadcrumbPage,
+  BreadcrumbSeparator,
+} from "./components/ui/breadcrumb";
 import { Button } from "./components/ui/button";
 import { Copy } from "./components/ui/copy";
 import { HoverCard, HoverCardContent, HoverCardTrigger } from "./components/ui/hover-card";
+import { Loading } from "./components/ui/loading";
 import { alias, platformImages, verifyChannel } from "./Home";
-import { News, useNewsCanister } from "./hooks/useNewsCanister";
+import { Feeds, News, useFeedsCanister, useNewsCanister } from "./hooks/useNewsCanister";
 import { abbreviateAddress } from "./utils";
 
 const NewsDetail: React.FC = () => {
   const { id } = useParams();
+  const { pathname } = useLocation();
+  const newsMatch = useMatch("/news/:hash");
+  const flashMatch = useMatch("/flash/:hash");
+  const routeName = newsMatch ? "news" : flashMatch ? "flash" : "";
   const { getNewsByHash } = useNewsCanister();
+  const { getNewsByHash: getFeedsByHash } = useFeedsCanister();
   // const [selectedMenu, setSelectedMenu] = useState("Latest News");
   // const [selectedCategory, setSelectedCategory] = useState("All");
   // const [showDropdown, setShowDropdown] = useState(false);
@@ -23,15 +36,19 @@ const NewsDetail: React.FC = () => {
   // const [selectedNews, setSelectedNews] = useState<NewsItem | null>(null);
   // const [showNewsDetail, setShowNewsDetail] = useState(false);
 
-  const [item, setNewsItem] = useState<News | undefined>(undefined);
+  const [item, setNewsItem] = useState<News | Feeds | undefined>(undefined);
+  const [loading, setLoading] = useState(true);
   useEffect(() => {
     if (!id) return;
-    getNewsByHash(id)
+    (routeName === "flash" ? getFeedsByHash : getNewsByHash)(id)
       .then(setNewsItem)
       .catch((error) => {
         console.log("error:", error);
+      })
+      .finally(() => {
+        setLoading(false);
       });
-  }, [id]);
+  }, [id, routeName, getFeedsByHash, getNewsByHash]);
   const provider = item?.provider;
   const channel = item?.metadata?.channel.replace(" News", "").replace(".com", "");
   const sender = item?.provider?.alias || "IC.News";
@@ -39,14 +56,18 @@ const NewsDetail: React.FC = () => {
   console.log(item, platform, sender, "-channel");
   return (
     <div className={`max-w-7xl mx-auto min-h-screen`}>
-      <Breadcrumb
-        items={[
-          {
-            label: item?.title,
-            path: `/news/${id}`,
-          },
-        ]}
-      />
+      <Breadcrumb className="p-4 pb-0">
+        <BreadcrumbList>
+          <BreadcrumbItem>
+            <BreadcrumbLink href={`/${routeName}`}>Home</BreadcrumbLink>
+          </BreadcrumbItem>
+          <BreadcrumbSeparator className="mt-1" />
+          <BreadcrumbItem>
+            <BreadcrumbPage dangerouslySetInnerHTML={{ __html: item?.title ?? "" }} />
+          </BreadcrumbItem>
+        </BreadcrumbList>
+      </Breadcrumb>
+      {loading && <Loading />}
       <div className={`bg-[var(--bg-color-secondary)] shadow-sm p-4 md:p-6 mb-4 md:mb-6`}>
         <div className="max-w-4xl mx-auto flex flex-col gap-4">
           <div className="flex items-center space-x-4">
@@ -57,12 +78,15 @@ const NewsDetail: React.FC = () => {
               {item?.created_at &&
                 formatInTimeZone(
                   new Date(item.created_at),
-                  "Asia/Shanghai",
+                  Intl.DateTimeFormat().resolvedOptions().timeZone,
                   "MM/dd/yyyy HH:mm:ss zzz"
                 )}
             </span>
           </div>
-          <h2 className={`text-3xl font-bold text-[var(--text-color-primary)]`}>{item?.title}</h2>
+          <h2
+            className={`text-3xl font-bold text-[var(--text-color-primary)]`}
+            dangerouslySetInnerHTML={{ __html: item?.title ?? "" }}
+          />
           <div className="flex gap-1 md:gap-2 flex-wrap">
             <div className="flex gap-2">
               {(channel || platform) && (
@@ -136,7 +160,10 @@ const NewsDetail: React.FC = () => {
           <div
             className={`prose max-w-none text-[var(--text-color-primary)] mb-8 leading-relaxed whitespace-pre-line [&_a]:text-blue-500 [&_a]:hover:underline`}
             dangerouslySetInnerHTML={{
-              __html: (item?.content ?? item?.description ?? "").replace(/\n/g, "<br />"),
+              __html: (item?.content ?? item?.description ?? item?.description ?? "").replace(
+                /\n/g,
+                "<br />"
+              ),
             }}
           />
           <div className="border-t border-[--border-color] pt-8">

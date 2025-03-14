@@ -90,6 +90,7 @@ export interface News {
   metadata: Value;
   hash: string;
   tags: Array<string>;
+  content?: string;
   description: string;
   created_at: bigint;
   category: string;

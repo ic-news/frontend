@@ -19,7 +19,7 @@ import { Feeds, useFeeds } from "./hooks/useNewsCanister";
 import { abbreviateAddress, classNames } from "./utils";
 
 // Container Component
-export default function FlashNewsContainer() {
+export default function FlashContainer() {
   const [activeTab, setActiveTab] = useState("For You");
 
   const tabs = ["Following", "WatchList Updates", "For You", "Trending Today", "Market"];
@@ -77,7 +77,7 @@ function FlashNews({
           body: latestNews.description,
           icon: "/icons/icon-192x192.png", // Make sure you have a favicon
           tag: latestNews.hash, // Prevent duplicate notifications
-          href: `/news/${latestNews.hash}`, // Store href in data field
+          href: `/flash/${latestNews.hash}`, // Store href in data field
         });
         prevNewsHashRef.current = latestNews.hash;
       }
@@ -130,7 +130,7 @@ function FlashNews({
               const platform = item?.metadata?.platform;
               return (
                 <Link
-                  to={`/news/${item.hash}`}
+                  to={`/flash/${item.hash}`}
                   key={item.hash}
                   className="group relative flex gap-x-3 md:gap-x-4"
                 >
@@ -152,14 +152,15 @@ function FlashNews({
                     />
                   </div>
                   <div className="flex-auto rounded-md p-2 flex justify-between gap-x-4 gap-y-1 md:gap-y-2 flex-col">
-                    <h3 className="text-xl font-bold font-semibold text-[var(--text-color-primary)] leading-snug group-hover:text-[var(--color-primary)]">
-                      {item.title}
-                    </h3>
+                    <h3
+                      className="text-xl font-bold font-semibold text-[var(--text-color-primary)] leading-snug group-hover:text-[var(--color-primary)]"
+                      dangerouslySetInnerHTML={{ __html: item.title }}
+                    />
                     <div className="flex gap-1 md:gap-2 flex-wrap">
                       <time
                         dateTime={formatInTimeZone(
                           new Date(item.created_at),
-                          "Asia/Shanghai",
+                          Intl.DateTimeFormat().resolvedOptions().timeZone,
                           "MM/dd/yyyy HH:mm:ss zzz"
                         )}
                         className="flex-none py-0.5 text-xs/5 text-[var(--text-color-primary)]"
@@ -167,7 +168,7 @@ function FlashNews({
                         {item.created_at &&
                           formatInTimeZone(
                             new Date(item.created_at),
-                            "Asia/Shanghai",
+                            Intl.DateTimeFormat().resolvedOptions().timeZone,
                             "MM/dd/yyyy HH:mm:ss zzz"
                           )}{" "}
                         (

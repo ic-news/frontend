@@ -144,14 +144,15 @@ function ICNewsApp({
                   className="group relative flex gap-x-3 md:gap-x-4"
                 >
                   <div className="flex-auto rounded-md p-2 flex justify-between gap-x-4 gap-y-1 md:gap-y-2 flex-col">
-                    <h3 className="text-xl font-bold font-semibold text-[var(--text-color-primary)] leading-snug group-hover:text-[var(--color-primary)]">
-                      {item.title}
-                    </h3>
+                    <h3
+                      className="text-xl font-bold font-semibold text-[var(--text-color-primary)] leading-snug group-hover:text-[var(--color-primary)]"
+                      dangerouslySetInnerHTML={{ __html: item.title }}
+                    />
                     <div className="flex gap-1 md:gap-2 flex-wrap">
                       <time
                         dateTime={formatInTimeZone(
                           new Date(item.created_at),
-                          "Asia/Shanghai",
+                          Intl.DateTimeFormat().resolvedOptions().timeZone,
                           "MM/dd/yyyy HH:mm:ss zzz"
                         )}
                         className="flex-none py-0.5 text-xs/5 text-[var(--text-color-primary)]"
@@ -159,7 +160,7 @@ function ICNewsApp({
                         {item.created_at &&
                           formatInTimeZone(
                             new Date(item.created_at),
-                            "Asia/Shanghai",
+                            Intl.DateTimeFormat().resolvedOptions().timeZone,
                             "MM/dd/yyyy HH:mm:ss zzz"
                           )}{" "}
                         (
