@@ -35,8 +35,8 @@ export function Theme({ className }: { className: string }) {
 function Version() {
   return (
     <>
-      <Badge className="md:ml-2 h-6 hidden xl:block">Alpha</Badge>
-      <Badge className="md:ml-2 h-6 hidden max-xl:block">α</Badge>
+      <Badge className="md:ml-2 h-6 hidden xl:block">Beta</Badge>
+      <Badge className="md:ml-2 h-6 hidden max-xl:block">β</Badge>
     </>
   );
 }
