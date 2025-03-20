@@ -1,0 +1,33 @@
+{
+  "short_name": "IC.News",
+  "name": "IC.News - Cryptocurrency News Platform on Internet Computer",
+  "icons": [
+    {
+      "src": "/icons/favicon.ico",
+      "sizes": "64x64 32x32 24x24 16x16",
+      "type": "image/x-icon"
+    },
+    {
+      "src": "/icons/icon-192x192.png",
+      "type": "image/png",
+      "sizes": "192x192",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "/icons/icon-512x512.png",
+      "type": "image/png",
+      "sizes": "512x512",
+      "purpose": "any maskable"
+    }
+  ],
+  "start_url": ".",
+  "scope": "/",
+  "display": "standalone",
+  "theme_color": "#ffffff",
+  "background_color": "#ffffff",
+  "description": "IC News - Your trusted source for cryptocurrency news and updates on the Internet Computer ecosystem. Stay informed with real-time news coverage, market analysis, and blockchain insights.",
+  "orientation": "portrait",
+  "categories": ["news", "cryptocurrency", "blockchain"],
+  "prefer_related_applications": false,
+  "permissions": ["notifications"]
+}
