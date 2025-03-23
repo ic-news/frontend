@@ -12,32 +12,44 @@ module.exports = {
       }
 
       // Configure source map handling
-      if (process.env.NODE_ENV === 'production') {
-        // Disable source maps for specific packages in production
-        webpackConfig.module.rules.push({
-          test: /node_modules\/simple-cbor/,
-          enforce: 'pre',
-          loader: 'source-map-loader',
-          options: {
-            filterSourceMappingUrl: (url, resourcePath) => {
-              return false; // Always ignore source maps for simple-cbor
+      // Ignore source maps for problematic packages in both development and production
+      webpackConfig.module.rules.push({
+        test: /\.js$/,
+        enforce: 'pre',
+        use: [
+          {
+            loader: 'source-map-loader',
+            options: {
+              filterSourceMappingUrl: (url, resourcePath) => {
+                // Ignore source maps for simple-cbor package
+                if (resourcePath.includes('node_modules/simple-cbor') ||
+                    resourcePath.includes('node_modules/.pnpm/simple-cbor')) {
+                  return false;
+                }
+                return true;
+              }
             }
           }
-        });
-      } else {
-        // In development, still load source maps but exclude problematic packages
-        webpackConfig.module.rules.push({
-          test: /\.js$/,
-          enforce: 'pre',
-          use: ['source-map-loader'],
-          resolve: {
-            fullySpecified: false
-          },
-          exclude: [
-            /node_modules\/simple-cbor/,
-          ]
-        });
-      }
+        ],
+        resolve: {
+          fullySpecified: false
+        }
+      });
+
+      // Explicitly ignore warnings from specific modules
+      webpackConfig.ignoreWarnings = [
+        // Ignore warnings about missing source maps for simple-cbor
+        function ignoreSourceMapWarnings(warning) {
+          return (
+            warning.module &&
+            warning.module.resource &&
+            (
+              warning.module.resource.includes('node_modules/simple-cbor') ||
+              warning.module.resource.includes('node_modules/.pnpm/simple-cbor')
+            )
+          );
+        }
+      ];
 
       if (process.env.NODE_ENV === "production") {
         // Enable module concatenation for better tree shaking

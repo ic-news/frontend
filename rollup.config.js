@@ -13,10 +13,8 @@ const json = require("@rollup/plugin-json");
 const replace = require("@rollup/plugin-replace");
 const dotenv = require("dotenv");
 
-// 加载环境变量
 dotenv.config();
 
-// 准备环境变量对象
 const env = {};
 Object.keys(process.env).forEach((key) => {
   if (key.startsWith("REACT_APP_")) {
@@ -24,10 +22,7 @@ Object.keys(process.env).forEach((key) => {
   }
 });
 
-// 添加一些常用的环境变量
 env["process.env.NODE_ENV"] = JSON.stringify(process.env.NODE_ENV || "production");
-
-// 这些依赖在使用时需要安装，或者在消费项目中配置 webpack
 
 const config = [
   // JS/TS bundle
@@ -86,7 +81,7 @@ const config = [
       commonjs({
         include: /node_modules/,
         transformMixedEsModules: true,
-        circular: true, // 允许循环依赖
+        circular: true,
       }),
       typescript({
         tsconfig: "./tsconfig.json",

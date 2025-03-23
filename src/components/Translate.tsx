@@ -1,58 +1,43 @@
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
+import { HoverCard, HoverCardContent, HoverCardTrigger } from "@/components/ui/hover-card";
+import { useCommonContext } from "@/context/CommonContext";
 import { Languages as LanguagesSvg } from "lucide-react";
 import React from "react";
 
-const Languages = [
-  { name: "简体中文", code: "zh-CN" },
-  { name: "繁體中文", code: "zh-TW" },
-  { name: "Tiếng Việt", code: "vi-VN" },
-  { name: "한국어", code: "ko-KR" },
-  { name: "日本語", code: "ja-JP" },
-  { name: "ภาษาไทย", code: "th-TH" },
-  { name: "Türkçe", code: "tr-TR" },
-];
 export default function Translate() {
-  React.useEffect(() => {
-    const script = document.createElement("script");
-    script.src = "//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit";
-    script.async = true;
-    document.body.appendChild(script);
-    return () => {
-      document.body.removeChild(script);
-    };
-  }, []);
-  const handleLanguageChange = (language: string) => {
-    new window.google.translate.TranslateElement(
-      {
-        pageLanguage: "en-US",
-        includedLanguages: "en,zh-CN,es,fr",
-        layout: window.google.translate.TranslateElement.InlineLayout.SIMPLE,
-      },
-      document.documentElement
-    );
+  const { languages, language, setLanguage } = useCommonContext();
+  const [isOpen, setIsOpen] = React.useState(false);
+
+  const handleLanguageSelect = (selectedLanguage: typeof language) => {
+    if (language?.language_code !== selectedLanguage.language_code) {
+      setLanguage(selectedLanguage);
+      console.log(selectedLanguage, "-selectedLanguage");
+      localStorage.setItem("language", JSON.stringify(selectedLanguage));
+    }
+    setIsOpen(false);
   };
+
   return (
     <>
-      <DropdownMenu>
-        <DropdownMenuTrigger asChild>
-          <LanguagesSvg className="ml-auto" />
-        </DropdownMenuTrigger>
-        <DropdownMenuContent>
-          {Languages.map((language) => (
-            <DropdownMenuItem
-              key={language.code}
-              onClick={() => handleLanguageChange(language.code)}
-            >
-              {language.name}
-            </DropdownMenuItem>
-          ))}
-        </DropdownMenuContent>
-      </DropdownMenu>
+      <HoverCard openDelay={100} closeDelay={200} open={isOpen} onOpenChange={setIsOpen}>
+        <HoverCardTrigger asChild>
+          <LanguagesSvg className="ml-auto cursor-pointer" />
+        </HoverCardTrigger>
+        <HoverCardContent align="start" className="w-32 p-2">
+          <div className="flex flex-col space-y-1">
+            {languages.map((l) => (
+              <button
+                key={l.language_code}
+                onClick={() => handleLanguageSelect(l)}
+                className={`px-2 py-1.5 text-sm hover:text-[var(--color-primary)] rounded-md text-left ${
+                  language?.language_code === l.language_code ? "text-[var(--color-primary)]" : ""
+                }`}
+              >
+                {l.language}
+              </button>
+            ))}
+          </div>
+        </HoverCardContent>
+      </HoverCard>
     </>
   );
 }

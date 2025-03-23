@@ -1,5 +1,4 @@
 import { useEffect, useState } from "react";
-import { getLastFetchTime, getTokens, saveTokens, STORES } from "../services/db";
 
 interface Chart {
   name: string;
@@ -74,42 +73,19 @@ export function useICPTokens() {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    // Load cached data first
-    const loadCachedData = async () => {
-      try {
-        const cachedTokens = await getTokens();
-        if (cachedTokens.length > 0) {
-          setTokens(cachedTokens.sort((a: TOKEN, b: TOKEN) => a.rank - b.rank));
-          setLoading(false);
-        }
-      } catch (error) {
-        console.error("Error loading cached tokens:", error);
-      }
-    };
-
     // Define data fetching function
     const fetchTokens = async () => {
       try {
-        const lastUpdate = await getLastFetchTime(STORES.TOKENS);
-        const now = Date.now();
-
         // Only fetch if cache is older than 1 minute
-        if (now - lastUpdate > cacheTime) {
-          const response = await fetch("https://web2.icptokens.net/api/tokens");
-          const data = (await response.json()).sort((a: TOKEN, b: TOKEN) => a.rank - b.rank);
-          setTokens(data);
-          setLoading(false);
-          // Save to IndexedDB
-          await saveTokens(data);
-        }
+        const response = await fetch("https://web2.icptokens.net/api/tokens");
+        const data = (await response.json()).sort((a: TOKEN, b: TOKEN) => a.rank - b.rank);
+        setTokens(data);
+        setLoading(false);
       } catch (error) {
         console.error("Error fetching tokens:", error);
         setLoading(false);
       }
     };
-
-    // Load cached data immediately
-    loadCachedData();
 
     // Then fetch fresh data
     fetchTokens();

@@ -88,7 +88,7 @@ export function ICEcosystemTokens() {
 }
 
 export function MarketOverview() {
-  const { listings } = useTopCryptoListings(5, false);
+  const { listings } = useTopCryptoListings(5);
   return (
     <div className="space-y-4 md:mb-8">
       <h2 className="font-bold mb-4 text-[var(--text-color-primary)]">Market Overview</h2>

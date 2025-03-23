@@ -1,5 +1,6 @@
 // The exported code uses Tailwind CSS. Install Tailwind CSS in your dev environment to ensure all styles work.
 // start
+import { useCommonContext } from "@/context/CommonContext";
 import { formatInTimeZone } from "date-fns-tz";
 import React, { useEffect, useState } from "react";
 import { useMatch, useParams } from "react-router-dom";
@@ -17,6 +18,7 @@ import { Loading } from "./components/ui/loading";
 import { Feeds, News, useFeedsCanister, useNewsCanister } from "./hooks/useNewsCanister";
 
 const NewsDetail: React.FC = () => {
+  const { language } = useCommonContext();
   const { id } = useParams();
   const newsMatch = useMatch("/news/:hash");
   const flashMatch = useMatch("/flash/:hash");
@@ -43,10 +45,20 @@ const NewsDetail: React.FC = () => {
         setLoading(false);
       });
   }, [id, routeName, getFeedsByHash, getNewsByHash]);
-  const provider = item?.provider;
   const channel = item?.metadata?.channel.replace(" News", "").replace(".com", "");
   const sender = item?.provider?.alias || "IC.News";
   const platform = item?.metadata?.platform.replace(" News", "").replace(".com", "");
+  const title =
+    language.language_code === "en"
+      ? item?.title
+      : item?.metadata[`title_${language.language_code}`] ?? item?.title;
+  const description =
+    language.language_code === "en"
+      ? item?.content ?? item?.description
+      : item?.metadata[`content_${language.language_code}`] ??
+        item?.metadata[`description_${language.language_code}`] ??
+        item?.content ??
+        item?.description;
   console.log(item, platform, sender, "-channel");
   return (
     <div className={`max-w-7xl mx-auto min-h-screen`}>
@@ -57,7 +69,7 @@ const NewsDetail: React.FC = () => {
           </BreadcrumbItem>
           <BreadcrumbSeparator className="mt-1" />
           <BreadcrumbItem>
-            <BreadcrumbPage dangerouslySetInnerHTML={{ __html: item?.title ?? "" }} />
+            <BreadcrumbPage dangerouslySetInnerHTML={{ __html: title ?? "" }} />
           </BreadcrumbItem>
         </BreadcrumbList>
       </Breadcrumb>
@@ -79,7 +91,7 @@ const NewsDetail: React.FC = () => {
           </div>
           <h2
             className={`text-3xl font-bold text-[var(--text-color-primary)]`}
-            dangerouslySetInnerHTML={{ __html: item?.title ?? "" }}
+            dangerouslySetInnerHTML={{ __html: title ?? "" }}
           />
           <div className="flex gap-1 md:gap-2 flex-wrap">
             <div className="flex gap-2">
@@ -94,10 +106,7 @@ const NewsDetail: React.FC = () => {
           <div
             className={`prose max-w-none text-[var(--text-color-primary)] mb-8 leading-relaxed whitespace-pre-line [&_a]:text-blue-500 [&_a]:hover:underline`}
             dangerouslySetInnerHTML={{
-              __html: (item?.content ?? item?.description ?? item?.description ?? "").replace(
-                /\n/g,
-                "<br />"
-              ),
+              __html: (description ?? "").replace(/\n/g, "<br />"),
             }}
           />
           <div className="border-t border-[--border-color] pt-8">

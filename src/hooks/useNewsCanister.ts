@@ -17,48 +17,13 @@ import type {
 import { idlFactory as NewsIdlFactory, _SERVICE as NewsService } from "../canister/ic.news.news";
 import useActor from "./useActor";
 
-interface Metadata {
-  // Platform identifier (telegram/twitter/x)
-  platform: string;
-  // Original message URL for content retrieval
-  url: string;
-  // Channel or account username
-  channel: string;
-  // Original message identifier from the platform
-  messageId: string;
-  // Raw source content/text from original message
-  source: string;
-  // Channel/Account profile picture URL
-  profilePic: string;
-  // Unique identifier for the content author
-  authorId: string;
-  // Display name of the content author/channel
-  authorName: string;
-  // Verification status of the author/channel
-  verified: boolean;
-
-  sender: string;
-  podcastDuration: string;
-  podcastExplicit: boolean;
-  podcastSubtitle: string;
-  podcastEpisodeType: string;
-  podcastTitle: string;
-  description: string;
-  website: string;
-  contentSnippet: string;
-  language: string;
-  weight: string;
-  sign: string;
-  appPush: boolean;
-  atomUpdated: string;
-}
 interface Provider {
   pid: string;
   alias: string;
 }
 export type Feeds = Omit<FeedsCanister, "metadata" | "created_at" | "provider"> & {
   created_at: number;
-  metadata: Metadata;
+  metadata: { [key: string]: any };
   provider: Provider;
 };
 export type FeedsResponse = Omit<FeedsResponseCanister, "news"> & {
@@ -67,7 +32,7 @@ export type FeedsResponse = Omit<FeedsResponseCanister, "news"> & {
 
 export type News = Omit<NewsCanister, "metadata" | "created_at" | "provider"> & {
   created_at: number;
-  metadata: Metadata;
+  metadata: { [key: string]: any };
   provider: Provider;
 };
 export type NewsResponse = Omit<NewsResponseCanister, "news"> & {
@@ -88,6 +53,7 @@ const getValuePrincipal = (value: Value | undefined): string => {
 };
 
 // Helper function to extract boolean from Value type
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 const getValueBool = (value: Value | undefined): boolean => {
   if (!value || !("Bool" in value)) {
     return false;
@@ -95,10 +61,9 @@ const getValueBool = (value: Value | undefined): boolean => {
   return value.Bool;
 };
 
-const convertMetadata = (value: Value): Metadata => {
+const convertMetadata = (value: Value): { [key: string]: any } => {
   if ("Map" in value) {
     const metadataMap = new Map(value.Map);
-    console.log(metadataMap, "-metadataMap");
     let map: Record<string, any> = {};
     metadataMap.forEach((value: any, key: string) => {
       if (value.Text) {
@@ -115,7 +80,7 @@ const convertMetadata = (value: Value): Metadata => {
         map[key] = value.Principal.toString();
       }
     });
-    return map as Metadata;
+    return map;
   }
   throw new Error("Invalid metadata format");
 };
@@ -477,7 +442,6 @@ export function useFeeds(limit: bigint = BigInt(20)) {
   const [news, setNews] = useState<Feeds[]>([]);
   const [hasNextPage, setHasNextPage] = useState(true);
   const [isLoading, setIsLoading] = useState(false);
-  const [page, setPage] = useState(0);
   const [total, setTotal] = useState<bigint>(BigInt(0));
   const [newNewsCount, setNewNewsCount] = useState<number>(0);
 
@@ -499,7 +463,7 @@ export function useFeeds(limit: bigint = BigInt(20)) {
       }
     };
     init();
-  }, []);
+  }, [getTotalNews, limit, queryLatestNews]);
 
   // Update news when WebSocket provides new data
   useEffect(() => {
@@ -551,7 +515,7 @@ export function useFeeds(limit: bigint = BigInt(20)) {
       const intervalId = setInterval(updateNews, 10000);
       return () => clearInterval(intervalId);
     }
-  }, [wsConnected]);
+  }, [wsConnected, limit, queryLatestNews]);
 
   // Create a function to refresh news
   const refreshNews = useCallback(() => {
@@ -598,7 +562,6 @@ export function useFeeds(limit: bigint = BigInt(20)) {
       // Only update if we got new news
       if (response.news.length > 0) {
         setNews((prevNews) => [...prevNews, ...response.news]);
-        setPage((prev) => prev + 1);
 
         // Check if we have more pages
         // We have more pages if start position > 0
@@ -612,7 +575,7 @@ export function useFeeds(limit: bigint = BigInt(20)) {
     } finally {
       setIsLoading(false);
     }
-  }, [page, hasNextPage, isLoading, limit, news.length, total]);
+  }, [hasNextPage, isLoading, limit, news.length, total, queryNews]);
 
   return {
     news,
@@ -942,7 +905,6 @@ export function useNews(limit: bigint = BigInt(20)) {
   const [news, setNews] = useState<News[]>([]);
   const [hasNextPage, setHasNextPage] = useState(true);
   const [isLoading, setIsLoading] = useState(false);
-  const [page, setPage] = useState(0);
   const [total, setTotal] = useState<bigint>(BigInt(0));
   const [newNewsCount, setNewNewsCount] = useState<number>(0);
 
@@ -964,7 +926,7 @@ export function useNews(limit: bigint = BigInt(20)) {
       }
     };
     init();
-  }, []);
+  }, [getTotalNews, limit, queryLatestNews]);
 
   // Update news when WebSocket provides new data
   useEffect(() => {
@@ -1016,7 +978,7 @@ export function useNews(limit: bigint = BigInt(20)) {
       const intervalId = setInterval(updateNews, 10000);
       return () => clearInterval(intervalId);
     }
-  }, [wsConnected]);
+  }, [wsConnected, limit, queryLatestNews]);
 
   // Create a function to refresh news
   const refreshNews = useCallback(() => {
@@ -1063,7 +1025,6 @@ export function useNews(limit: bigint = BigInt(20)) {
       // Only update if we got new news
       if (response.news.length > 0) {
         setNews((prevNews) => [...prevNews, ...response.news]);
-        setPage((prev) => prev + 1);
 
         // Check if we have more pages
         // We have more pages if start position > 0
@@ -1077,7 +1038,7 @@ export function useNews(limit: bigint = BigInt(20)) {
     } finally {
       setIsLoading(false);
     }
-  }, [page, hasNextPage, isLoading, limit, news.length, total]);
+  }, [hasNextPage, isLoading, limit, news.length, total, queryNews]);
 
   return {
     news,

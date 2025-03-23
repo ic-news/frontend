@@ -1,6 +1,7 @@
-import { createContext, useContext, useEffect, useRef, useState } from "react";
+import { createContext, useContext, useEffect, useState } from "react";
+import type { Language } from "../hooks/useLanguageCanister";
+import { defaultLanguage, useLanguageCanister } from "../hooks/useLanguageCanister";
 import { useNewsCanister } from "../hooks/useNewsCanister";
-
 interface Tags {
   name: string;
 }
@@ -12,6 +13,9 @@ interface Category {
 interface CommonContextType {
   tags: Tags[];
   categories: Category[];
+  languages: Language[];
+  language: Language;
+  setLanguage: (language: Language) => void;
 }
 const CommonContext = createContext<CommonContextType | undefined>(undefined);
 
@@ -19,7 +23,14 @@ export function CommonContextProvider({ children }: { children: React.ReactNode 
   const [tags, setTags] = useState<Tags[]>([]);
   const [categories, setCategories] = useState<Category[]>([]);
   const { getTags, getCategories } = useNewsCanister();
-  const fetchIntervalRef = useRef<NodeJS.Timeout | null>(null);
+  const [language, setLanguage] = useState<Language>(defaultLanguage);
+  useEffect(() => {
+    const savedLanguage = localStorage.getItem("language");
+    if (savedLanguage) {
+      setLanguage(JSON.parse(savedLanguage));
+    }
+  }, []);
+  const { languages } = useLanguageCanister();
   useEffect(() => {
     (async () => {
       const fetchData = async () => {
@@ -36,7 +47,11 @@ export function CommonContextProvider({ children }: { children: React.ReactNode 
     })();
   }, [getTags, getCategories]);
 
-  return <CommonContext.Provider value={{ tags, categories }}>{children}</CommonContext.Provider>;
+  return (
+    <CommonContext.Provider value={{ tags, categories, languages, language, setLanguage }}>
+      {children}
+    </CommonContext.Provider>
+  );
 }
 
 export function useCommonContext() {

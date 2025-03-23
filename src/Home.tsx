@@ -10,6 +10,7 @@ import { useEffect, useRef, useState } from "react";
 import InfiniteScroll from "react-infinite-scroll-component";
 import { Link } from "react-router-dom";
 import BadgeComponents from "./components/Badge";
+import { useCommonContext } from "./context/CommonContext";
 // Container Component
 export default function ICNewsAppContainer() {
   const [activeTab, setActiveTab] = useState("For You");
@@ -28,6 +29,7 @@ function ICNewsApp({
   activeTab: string;
   setActiveTab: (tab: string) => void;
 }) {
+  const { language } = useCommonContext();
   const { news, loadNextPage, hasNextPage } = useNews();
   const { hasPermission, requestPermission, sendNotification } = useNotification();
   useEffect(() => {
@@ -109,6 +111,14 @@ function ICNewsApp({
                 const channel = item?.metadata?.channel.replace(" News", "").replace(".com", "");
                 const sender = item?.provider?.alias || "IC.News";
                 const platform = item?.metadata?.platform.replace(" News", "").replace(".com", "");
+                const title =
+                  language.language_code === "en"
+                    ? item.title
+                    : item.metadata[`title_${language.language_code}`] ?? item.title;
+                const description =
+                  language.language_code === "en"
+                    ? item.description
+                    : item.metadata[`description_${language.language_code}`] ?? item.description;
                 return (
                   <Link
                     to={`/news/${item.hash}`}
@@ -118,7 +128,7 @@ function ICNewsApp({
                     <div className="flex-auto rounded-md p-2 flex justify-between gap-x-4 gap-y-1 md:gap-y-2 flex-col">
                       <h3
                         className="text-xl font-bold font-semibold text-[var(--text-color-primary)] leading-snug group-hover:text-[var(--color-primary)]"
-                        dangerouslySetInnerHTML={{ __html: item.title }}
+                        dangerouslySetInnerHTML={{ __html: title }}
                       />
                       <div className="flex gap-1 md:gap-2 flex-wrap">
                         <time
@@ -153,7 +163,7 @@ function ICNewsApp({
                       <div
                         className="text-sm/6 text-[var(--text-color-primary)] whitespace-pre-line [&_a]:text-blue-500 [&_a]:hover:underline line-clamp-3"
                         dangerouslySetInnerHTML={{
-                          __html: item.description.replace(/\n/g, "<br />"),
+                          __html: description.replace(/\n/g, "<br />"),
                         }}
                       />
                       <div className="flex gap-2 w-full flex-wrap">

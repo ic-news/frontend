@@ -11,6 +11,7 @@ import { ChevronUp } from "lucide-react";
 import * as React from "react";
 import InfiniteScroll from "react-infinite-scroll-component";
 import { Link } from "react-router-dom";
+import { useCommonContext } from "./context/CommonContext";
 
 // Container Component
 export default function FlashContainer() {
@@ -37,6 +38,7 @@ function FlashNews({
   activeTab: string;
   setActiveTab: (tab: string) => void;
 }) {
+  const { language } = useCommonContext();
   const { news, loadNextPage, hasNextPage } = useFeeds();
   const { hasPermission, requestPermission, sendNotification } = useNotification();
   React.useEffect(() => {
@@ -50,7 +52,6 @@ function FlashNews({
   const isInitialLoadRef = React.useRef<boolean>(true);
 
   React.useEffect(() => {
-    console.log(news, "-news");
     if (news.length > 0) {
       const latestNews = news[0];
       if (!latestNews.title || !latestNews.description) return;
@@ -119,6 +120,14 @@ function FlashNews({
               const channel = item?.metadata?.channel;
               const sender = item?.provider?.alias || "IC.News";
               const platform = item?.metadata?.platform;
+              const title =
+                language.language_code === "en"
+                  ? item?.title
+                  : item?.metadata[`title_${language.language_code}`] ?? item?.title;
+              const description =
+                language.language_code === "en"
+                  ? item?.description
+                  : item?.metadata[`description_${language.language_code}`] ?? item?.description;
               return (
                 <Link
                   to={`/flash/${item.hash}`}
@@ -145,7 +154,7 @@ function FlashNews({
                   <div className="flex-auto rounded-md p-2 flex justify-between gap-x-4 gap-y-1 md:gap-y-2 flex-col">
                     <h3
                       className="text-xl font-bold font-semibold text-[var(--text-color-primary)] leading-snug group-hover:text-[var(--color-primary)]"
-                      dangerouslySetInnerHTML={{ __html: item.title }}
+                      dangerouslySetInnerHTML={{ __html: title }}
                     />
                     <div className="flex gap-1 md:gap-2 flex-wrap">
                       <time
@@ -180,7 +189,7 @@ function FlashNews({
                     <div
                       className="text-sm/6 text-[var(--text-color-primary)] whitespace-pre-line [&_a]:text-blue-500 [&_a]:hover:underline line-clamp-3"
                       dangerouslySetInnerHTML={{
-                        __html: item.description.replace(/\n/g, "<br />"),
+                        __html: description.replace(/\n/g, "<br />"),
                       }}
                     />
                     <div className="flex gap-2 w-full flex-wrap">
