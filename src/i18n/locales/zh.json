@@ -13,7 +13,8 @@
   },
   "sidebar": {
     "home": "首页",
-    "news_flash": "快讯"
+    "news_flash": "快讯",
+    "news": "新闻"
   },
   "news": {
     "latest": "最新新闻",

@@ -13,7 +13,8 @@
   },
   "sidebar": {
     "home": "ホーム",
-    "news_flash": "ニュース"
+    "news_flash": "ニュース",
+    "news": "ニュース"
   },
   "news": {
     "latest": "最新ニュース",

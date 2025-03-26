@@ -13,7 +13,8 @@
   },
   "sidebar": {
     "home": "Home",
-    "news_flash": "Flash"
+    "news_flash": "Flash",
+    "news": "News"
   },
   "news": {
     "latest": "Latest News",

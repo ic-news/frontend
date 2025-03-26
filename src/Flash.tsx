@@ -9,7 +9,6 @@ import { format, formatDistance } from "date-fns";
 import { formatInTimeZone } from "date-fns-tz";
 import { ChevronUp } from "lucide-react";
 import * as React from "react";
-import { useTranslation } from "react-i18next";
 import InfiniteScroll from "react-infinite-scroll-component";
 import { Link } from "react-router-dom";
 import { useCommonContext } from "./context/CommonContext";
@@ -39,7 +38,6 @@ function FlashNews({
   activeTab: string;
   setActiveTab: (tab: string) => void;
 }) {
-  const { i18n } = useTranslation();
   const { language, currentLocale } = useCommonContext();
   const { news, loadNextPage, hasNextPage } = useFeeds();
   const { hasPermission, requestPermission, sendNotification } = useNotification();

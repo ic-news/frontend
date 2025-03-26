@@ -1,5 +1,5 @@
 import { useTheme } from "@/context/ThemeContext";
-import { Home, Moon, Sun, Zap } from "lucide-react";
+import { Home, Moon, Newspaper, Sun } from "lucide-react";
 import { Trans } from "react-i18next";
 import { Link, useLocation } from "react-router-dom";
 import logo from "../assets/logo.svg";
@@ -14,7 +14,7 @@ interface NavItem {
 }
 const navItems: NavItem[] = [
   { icon: Home, label: "sidebar.home", badge: "", router: "/" },
-  { icon: Zap, label: "sidebar.news_flash", badge: "", router: "/flash" },
+  { icon: Newspaper, label: "sidebar.news", badge: "", router: "/news" },
 ];
 export function Theme({ className }: { className: string }) {
   const { darkMode, toggleDarkMode } = useTheme();

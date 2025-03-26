@@ -22,7 +22,7 @@ const NewsDetail: React.FC = () => {
   const { id } = useParams();
   const newsMatch = useMatch("/news/:hash");
   const flashMatch = useMatch("/flash/:hash");
-  const routeName = newsMatch ? "news" : flashMatch ? "flash" : "";
+  const routeName = newsMatch ? "news" : flashMatch ? "" : "";
   const { getNewsByHash } = useNewsCanister();
   const { getNewsByHash: getFeedsByHash } = useFeedsCanister();
   // const [selectedMenu, setSelectedMenu] = useState("Latest News");
@@ -36,7 +36,7 @@ const NewsDetail: React.FC = () => {
   const [loading, setLoading] = useState(true);
   useEffect(() => {
     if (!id) return;
-    (routeName === "flash" ? getFeedsByHash : getNewsByHash)(id)
+    (routeName === "" ? getFeedsByHash : getNewsByHash)(id)
       .then(setNewsItem)
       .catch((error) => {
         console.log("error:", error);

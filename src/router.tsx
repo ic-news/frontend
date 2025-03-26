@@ -12,16 +12,15 @@ const routes: RouteObject[] = [
     children: [
       {
         index: true,
+        element: <Flash />,
+      },
+      {
+        path: "/news",
         element: <Home />,
       },
       {
         path: "/news/:id",
         element: <Details />,
-      },
-      {
-        path: "/flash",
-        index: true,
-        element: <Flash />,
       },
       {
         path: "/flash/:id",

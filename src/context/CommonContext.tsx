@@ -1,5 +1,6 @@
 import dateLocales from "@/i18n/dateLocals";
 import { createContext, useContext, useEffect, useMemo, useState } from "react";
+import { useTranslation } from "react-i18next";
 import type { Language } from "../hooks/useLanguageCanister";
 import { defaultLanguage, useLanguageCanister } from "../hooks/useLanguageCanister";
 import { useNewsCanister } from "../hooks/useNewsCanister";
@@ -22,6 +23,7 @@ interface CommonContextType {
 const CommonContext = createContext<CommonContextType | undefined>(undefined);
 
 export function CommonContextProvider({ children }: { children: React.ReactNode }) {
+  const { i18n } = useTranslation();
   const [tags, setTags] = useState<Tags[]>([]);
   const [categories, setCategories] = useState<Category[]>([]);
   const { getTags, getCategories } = useNewsCanister();
@@ -31,6 +33,8 @@ export function CommonContextProvider({ children }: { children: React.ReactNode 
     if (savedLanguage) {
       const parsedLanguage = JSON.parse(savedLanguage);
       setLanguage(parsedLanguage);
+      // Update i18next language
+      i18n.changeLanguage(parsedLanguage.language_code);
     }
   }, []);
   const { languages } = useLanguageCanister();
@@ -55,6 +59,8 @@ export function CommonContextProvider({ children }: { children: React.ReactNode 
     setLanguage(selectedLanguage);
     // Save language to localStorage
     localStorage.setItem("language", JSON.stringify(selectedLanguage));
+    // Update i18next language
+    i18n.changeLanguage(selectedLanguage.language_code);
   };
   const currentLocale = useMemo(
     () => dateLocales[language.language_code as keyof typeof dateLocales] || dateLocales["en"],
