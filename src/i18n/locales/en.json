@@ -13,7 +13,7 @@
   },
   "sidebar": {
     "home": "Home",
-    "news_flash": "Flash",
+    "news_flash": "News Flash",
     "news": "News"
   },
   "news": {
@@ -21,7 +21,7 @@
     "trending": "Trending",
     "categories": "Categories",
     "readMore": "Read More",
-    "publishedOn": "Published on"
+    "publishedOn": "Date"
   },
   "market": {
     "price": "Price",
@@ -37,5 +37,11 @@
     "lightMode": "Light Mode",
     "language": "Language",
     "notifications": "Notifications"
+  },
+  "share": {
+    "share": "Share",
+    "shareToTelegram": "Share to Telegram",
+    "shareToX": "Share to X",
+    "copyLink": "Copy Link"
   }
 }

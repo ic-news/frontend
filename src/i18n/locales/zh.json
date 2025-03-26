@@ -37,5 +37,11 @@
     "lightMode": "浅色模式",
     "language": "语言",
     "notifications": "通知"
+  },
+  "share": {
+    "share": "分享",
+    "shareToTelegram": "分享到 Telegram",
+    "shareToX": "分享到 X",
+    "copyLink": "复制链接"
   }
 }

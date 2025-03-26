@@ -7,10 +7,14 @@ import { Feeds, useFeeds } from "@/hooks/useNewsCanister";
 import { classNames } from "@/utils";
 import { format, formatDistance } from "date-fns";
 import { formatInTimeZone } from "date-fns-tz";
-import { ChevronUp } from "lucide-react";
+import { ChevronUp, Share2 } from "lucide-react";
 import * as React from "react";
+import { Trans } from "react-i18next";
 import InfiniteScroll from "react-infinite-scroll-component";
 import { Link } from "react-router-dom";
+import FloatingMenu from "./components/FloatingMenu";
+import Telegram from "./components/Telegram";
+import X from "./components/X";
 import { useCommonContext } from "./context/CommonContext";
 
 // Container Component
@@ -131,6 +135,8 @@ function FlashNews({
                 language.language_code === "en"
                   ? item?.description
                   : item?.metadata[`description_${language.language_code}`] ?? item?.description;
+
+              const url = `https://ic.news/flash/${item.hash}`;
               return (
                 <Link
                   to={`/flash/${item.hash}`}
@@ -202,6 +208,69 @@ function FlashNews({
                         </Badge>
                       ))}
                     </div>
+                    <FloatingMenu
+                      options={[
+                        {
+                          component: "a" as React.ElementType,
+                          href: `https://t.me/share/url?url=${encodeURIComponent(
+                            url
+                          )}&text=${encodeURIComponent(title)}`,
+                          label: (
+                            <>
+                              <Telegram />
+                              <span className="text-sm/6">
+                                <Trans i18nKey="share.shareToTelegram" />
+                              </span>
+                            </>
+                          ),
+                        },
+                        {
+                          component: "a" as React.ElementType,
+                          href: `https://x.com/intent/tweet?text=${encodeURIComponent(
+                            title
+                          )}&url=${encodeURIComponent(url)}`,
+                          label: (
+                            <>
+                              <X />
+                              <span className="text-sm/6">
+                                <Trans i18nKey="share.shareToX" />
+                              </span>
+                            </>
+                          ),
+                        },
+                        {
+                          component: "button" as React.ElementType,
+                          label: (
+                            <>
+                              <svg
+                                viewBox="0 0 1024 1024"
+                                version="1.1"
+                                xmlns="http://www.w3.org/2000/svg"
+                                width="20"
+                                height="20"
+                              >
+                                <path
+                                  d="M512 0a512 512 0 1 1 0 1024A512 512 0 0 1 512 0z m0 64a448 448 0 1 0 0 896A448 448 0 0 0 512 64z m187.904 320a64 64 0 0 1 64 64v256a64 64 0 0 1-64 64h-256a64 64 0 0 1-64-64V448a64 64 0 0 1 64-64h256zM576 256a64 64 0 0 1 64 64H384a64 64 0 0 0-63.552 56.512L320 384v256a64 64 0 0 1-64-64V320a64 64 0 0 1 64-64h256z"
+                                  fill="#000000"
+                                ></path>
+                              </svg>
+                              <span className="text-sm/6">
+                                <Trans i18nKey="share.copyLink" />
+                              </span>
+                            </>
+                          ),
+                          onClick: () => {
+                            navigator.clipboard.writeText(url);
+                          },
+                        },
+                      ]}
+                      className="ml-auto gap-1 flex items-center"
+                    >
+                      <Share2 className="w-4 h-4" />
+                      <span className="text-sm/6">
+                        <Trans i18nKey="share.share" />
+                      </span>
+                    </FloatingMenu>
                   </div>
                 </Link>
               );
