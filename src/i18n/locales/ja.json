@@ -1,0 +1,40 @@
+{
+  "common": {
+    "home": "ホーム",
+    "news": "ニュース",
+    "market": "マーケット",
+    "settings": "設定",
+    "profile": "プロフィール",
+    "search": "検索",
+    "language": "言語",
+    "marketOverview": "市場概要",
+    "icpEcosystemTokens": "ICP エコシステム トークン",
+    "followUs": "フォロー"
+  },
+  "sidebar": {
+    "home": "ホーム",
+    "news_flash": "ニュース"
+  },
+  "news": {
+    "latest": "最新ニュース",
+    "trending": "トレンド",
+    "categories": "カテゴリー",
+    "readMore": "続きを読む",
+    "publishedOn": "公開日"
+  },
+  "market": {
+    "price": "価格",
+    "change": "変動",
+    "marketCap": "時価総額",
+    "volume": "取引量",
+    "high24h": "24時間最高値",
+    "low24h": "24時間最安値"
+  },
+  "settings": {
+    "theme": "テーマ",
+    "darkMode": "ダークモード",
+    "lightMode": "ライトモード",
+    "language": "言語",
+    "notifications": "通知"
+  }
+}

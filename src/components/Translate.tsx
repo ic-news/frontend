@@ -2,6 +2,7 @@ import { HoverCard, HoverCardContent, HoverCardTrigger } from "@/components/ui/h
 import { useCommonContext } from "@/context/CommonContext";
 import { Languages as LanguagesSvg } from "lucide-react";
 import React from "react";
+import i18n from "../i18n";
 
 export default function Translate() {
   const { languages, language, setLanguage } = useCommonContext();
@@ -10,8 +11,8 @@ export default function Translate() {
   const handleLanguageSelect = (selectedLanguage: typeof language) => {
     if (language?.language_code !== selectedLanguage.language_code) {
       setLanguage(selectedLanguage);
-      console.log(selectedLanguage, "-selectedLanguage");
       localStorage.setItem("language", JSON.stringify(selectedLanguage));
+      i18n.changeLanguage(selectedLanguage.language_code);
     }
     setIsOpen(false);
   };
@@ -20,7 +21,9 @@ export default function Translate() {
     <>
       <HoverCard openDelay={100} closeDelay={200} open={isOpen} onOpenChange={setIsOpen}>
         <HoverCardTrigger asChild>
-          <LanguagesSvg className="ml-auto cursor-pointer" />
+          <div className="flex items-center ml-auto cursor-pointer">
+            <LanguagesSvg className="mr-1" />
+          </div>
         </HoverCardTrigger>
         <HoverCardContent align="start" className="w-32 p-2">
           <div className="flex flex-col space-y-1">

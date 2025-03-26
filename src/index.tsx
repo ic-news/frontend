@@ -7,6 +7,8 @@ import { WalletConnectorProvider } from "./connector";
 import { CommonContextProvider } from "./context/CommonContext";
 import "./index.scss";
 import router from "./router";
+// Import I18nProvider
+import I18nProvider from "./i18n/I18nextProvider";
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -24,8 +26,10 @@ root.render(
     <QueryClientProvider client={queryClient}>
       <WalletConnectorProvider>
         <CommonContextProvider>
-          <RouterProvider router={router} />
-          <Toaster />
+          <I18nProvider>
+            <RouterProvider router={router} />
+            <Toaster />
+          </I18nProvider>
         </CommonContextProvider>
       </WalletConnectorProvider>
     </QueryClientProvider>

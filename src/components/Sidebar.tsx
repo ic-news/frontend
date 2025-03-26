@@ -1,5 +1,6 @@
 import { useTheme } from "@/context/ThemeContext";
 import { Home, Moon, Sun, Zap } from "lucide-react";
+import { Trans } from "react-i18next";
 import { Link, useLocation } from "react-router-dom";
 import logo from "../assets/logo.svg";
 import { classNames } from "../utils";
@@ -12,8 +13,8 @@ interface NavItem {
   router: string;
 }
 const navItems: NavItem[] = [
-  { icon: Home, label: "Home", badge: "", router: "/" },
-  { icon: Zap, label: "News Flash", badge: "", router: "/flash" },
+  { icon: Home, label: "sidebar.home", badge: "", router: "/" },
+  { icon: Zap, label: "sidebar.news_flash", badge: "", router: "/flash" },
 ];
 export function Theme({ className }: { className: string }) {
   const { darkMode, toggleDarkMode } = useTheme();
@@ -86,7 +87,7 @@ export default function Sidebar() {
                     : "text-[var(--text-color-primary)] group-hover:text-[var(--color-primary)]"
                 )}
               >
-                {item.label}
+                <Trans i18nKey={item.label} />
               </h2>
               {item.badge && (
                 <span className="ml-2 text-xs bg-green-500 text-white px-1 rounded">

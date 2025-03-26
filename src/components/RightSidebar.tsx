@@ -4,18 +4,20 @@ import { Mail, PanelLeftClose, PanelRightClose } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
 
 import CountUp from "react-countup";
+import { Trans } from "react-i18next";
 import InlineSvg from "react-inlinesvg";
 import Telegram from "../assets/images/telegram.svg";
 import X from "../assets/images/x.svg";
 import { Listing, useTopCryptoListings } from "../hooks/useCryptoMarket";
 import { TOKEN, useICPTokens } from "../hooks/useICPTokens";
 import { classNames, getFirstNonZeroDecimalPosition } from "../utils";
-
 export function ICEcosystemTokens() {
   const { tokens } = useICPTokens();
   return (
     <div className="space-y-4">
-      <h2 className="font-bold mb-4 text-[var(--text-color-primary)]">ICP Ecosystem Tokens</h2>
+      <h2 className="font-bold mb-4 text-[var(--text-color-primary)]">
+        <Trans i18nKey="common.icpEcosystemTokens" />
+      </h2>
       {tokens.slice(0, 5).map((token: TOKEN, index: number) => {
         const usd = new BigNumber(token.metrics.price.usd).toNumber();
         const decimals = getFirstNonZeroDecimalPosition(usd);
@@ -91,7 +93,9 @@ export function MarketOverview() {
   const { listings } = useTopCryptoListings(5);
   return (
     <div className="space-y-4 md:mb-8">
-      <h2 className="font-bold mb-4 text-[var(--text-color-primary)]">Market Overview</h2>
+      <h2 className="font-bold mb-4 text-[var(--text-color-primary)]">
+        <Trans i18nKey="common.marketOverview" />
+      </h2>
       {listings.map((listing: Listing) => {
         const getFirstNonZeroDecimalPosition = (num: number): number => {
           const decimalPart = String(num).split(".")[1];
@@ -158,7 +162,9 @@ export function MarketOverview() {
 export function SocialLinks() {
   return (
     <div className="mt-8 border border-[var(--border-color)] dark:border-gray-800 rounded-lg overflow-hidden lg:mt-auto flex-shrink-0 md:mt-8">
-      <h2 className="px-4 pt-3 font-bold text-[var(--text-color-primary)]">Follow Us</h2>
+      <h2 className="px-4 pt-3 font-bold text-[var(--text-color-primary)]">
+        <Trans i18nKey="common.followUs" />
+      </h2>
       <div className="py-4 flex items-center">
         <a
           href="https://t.me/ic_news_hub"

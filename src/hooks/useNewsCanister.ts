@@ -52,15 +52,6 @@ const getValuePrincipal = (value: Value | undefined): string => {
   return value.Principal.toString();
 };
 
-// Helper function to extract boolean from Value type
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
-const getValueBool = (value: Value | undefined): boolean => {
-  if (!value || !("Bool" in value)) {
-    return false;
-  }
-  return value.Bool;
-};
-
 const convertMetadata = (value: Value): { [key: string]: any } => {
   if ("Map" in value) {
     const metadataMap = new Map(value.Map);

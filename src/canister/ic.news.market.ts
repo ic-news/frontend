@@ -46,7 +46,7 @@ export interface _SERVICE {
   add_manager: ActorMethod<[Principal], { Ok: null } | { Err: string }>;
   delete_listing: ActorMethod<[string], { Ok: null } | { Err: string }>;
   get_listing: ActorMethod<[string], [] | [Listing]>;
-  get_listings: ActorMethod<[[] | [bigint], [] | [bigint]], Array<Listing>>;
+  get_listings: ActorMethod<[[] | [bigint], [] | [bigint], [] | [boolean]], Array<Listing>>;
   list_managers: ActorMethod<[], { Ok: Array<Principal> } | { Err: string }>;
   remove_manager: ActorMethod<[Principal], { Ok: null } | { Err: string }>;
   upsert_listing: ActorMethod<[Listing], { Ok: null } | { Err: string }>;
@@ -98,7 +98,11 @@ export const idlFactory = ({ IDL }: any) => {
     add_manager: IDL.Func([IDL.Principal], [IDL.Variant({ Ok: IDL.Null, Err: IDL.Text })], []),
     delete_listing: IDL.Func([IDL.Text], [IDL.Variant({ Ok: IDL.Null, Err: IDL.Text })], []),
     get_listing: IDL.Func([IDL.Text], [IDL.Opt(Listing)], ["query"]),
-    get_listings: IDL.Func([IDL.Opt(IDL.Nat), IDL.Opt(IDL.Nat)], [IDL.Vec(Listing)], ["query"]),
+    get_listings: IDL.Func(
+      [IDL.Opt(IDL.Nat), IDL.Opt(IDL.Nat), IDL.Opt(IDL.Bool)],
+      [IDL.Vec(Listing)],
+      ["query"]
+    ),
     list_managers: IDL.Func(
       [],
       [IDL.Variant({ Ok: IDL.Vec(IDL.Principal), Err: IDL.Text })],

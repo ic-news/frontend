@@ -10,7 +10,11 @@ interface SearchResponse {
 interface UseMarketDataResult {
   loading: boolean;
   error: string | null;
-  getListings: (limit: number, offset: number) => Promise<Listing[] | null>;
+  getListings: (
+    limit: number,
+    offset: number,
+    exclude_stablecoins: boolean
+  ) => Promise<Listing[] | null>;
   searchLoading: boolean;
   searchListings: (query: string) => Promise<SearchResponse | null>;
 }
@@ -27,11 +31,19 @@ export function useCryptoMarket(): UseMarketDataResult {
   const [error, setError] = useState<string | null>(null);
 
   const getListings = useCallback(
-    async (limit: number = 10, offset: number = 0): Promise<Listing[] | null> => {
+    async (
+      limit: number = 10,
+      offset: number = 0,
+      exclude_stablecoins: boolean = true
+    ): Promise<Listing[] | null> => {
       if (!actor) return null;
       setLoading(true);
       try {
-        const result = await actor.get_listings([BigInt(limit)], [BigInt(offset)]);
+        const result = await actor.get_listings(
+          [BigInt(limit)],
+          [BigInt(offset)],
+          [exclude_stablecoins]
+        );
         return result;
       } catch (err) {
         setError(err instanceof Error ? err.message : "An unknown error occurred");
@@ -79,7 +91,7 @@ export function useTopCryptoListings(limit: number = 5) {
     async function loadData() {
       try {
         // If cache is expired or empty, get fresh data
-        const freshData = await getListings(limit, 0);
+        const freshData = await getListings(limit, 0, true);
         if (mounted && freshData) {
           setListings(freshData.slice(0, limit));
         }

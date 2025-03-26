@@ -1,4 +1,5 @@
-import { createContext, useContext, useEffect, useState } from "react";
+import dateLocales from "@/i18n/dateLocals";
+import { createContext, useContext, useEffect, useMemo, useState } from "react";
 import type { Language } from "../hooks/useLanguageCanister";
 import { defaultLanguage, useLanguageCanister } from "../hooks/useLanguageCanister";
 import { useNewsCanister } from "../hooks/useNewsCanister";
@@ -15,6 +16,7 @@ interface CommonContextType {
   categories: Category[];
   languages: Language[];
   language: Language;
+  currentLocale: (typeof dateLocales)["en"];
   setLanguage: (language: Language) => void;
 }
 const CommonContext = createContext<CommonContextType | undefined>(undefined);
@@ -27,7 +29,8 @@ export function CommonContextProvider({ children }: { children: React.ReactNode 
   useEffect(() => {
     const savedLanguage = localStorage.getItem("language");
     if (savedLanguage) {
-      setLanguage(JSON.parse(savedLanguage));
+      const parsedLanguage = JSON.parse(savedLanguage);
+      setLanguage(parsedLanguage);
     }
   }, []);
   const { languages } = useLanguageCanister();
@@ -47,8 +50,27 @@ export function CommonContextProvider({ children }: { children: React.ReactNode 
     })();
   }, [getTags, getCategories]);
 
+  // Custom language setter that also updates i18next
+  const handleSetLanguage = (selectedLanguage: Language) => {
+    setLanguage(selectedLanguage);
+    // Save language to localStorage
+    localStorage.setItem("language", JSON.stringify(selectedLanguage));
+  };
+  const currentLocale = useMemo(
+    () => dateLocales[language.language_code as keyof typeof dateLocales] || dateLocales["en"],
+    [language.language_code]
+  );
   return (
-    <CommonContext.Provider value={{ tags, categories, languages, language, setLanguage }}>
+    <CommonContext.Provider
+      value={{
+        tags,
+        categories,
+        languages,
+        language,
+        currentLocale,
+        setLanguage: handleSetLanguage,
+      }}
+    >
       {children}
     </CommonContext.Provider>
   );

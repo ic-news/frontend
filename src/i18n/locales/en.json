@@ -1,0 +1,40 @@
+{
+  "common": {
+    "home": "Home",
+    "news": "News",
+    "market": "Market",
+    "settings": "Settings",
+    "profile": "Profile",
+    "search": "Search",
+    "language": "Language",
+    "marketOverview": "Market Overview",
+    "icpEcosystemTokens": "ICP Ecosystem Tokens",
+    "followUs": "Follow Us"
+  },
+  "sidebar": {
+    "home": "Home",
+    "news_flash": "Flash"
+  },
+  "news": {
+    "latest": "Latest News",
+    "trending": "Trending",
+    "categories": "Categories",
+    "readMore": "Read More",
+    "publishedOn": "Published on"
+  },
+  "market": {
+    "price": "Price",
+    "change": "Change",
+    "marketCap": "Market Cap",
+    "volume": "Volume",
+    "high24h": "24h High",
+    "low24h": "24h Low"
+  },
+  "settings": {
+    "theme": "Theme",
+    "darkMode": "Dark Mode",
+    "lightMode": "Light Mode",
+    "language": "Language",
+    "notifications": "Notifications"
+  }
+}

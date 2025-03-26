@@ -1,0 +1,40 @@
+{
+  "common": {
+    "home": "首页",
+    "news": "新闻",
+    "market": "市场",
+    "settings": "设置",
+    "profile": "个人资料",
+    "search": "搜索",
+    "language": "语言",
+    "marketOverview": "市场概述",
+    "icpEcosystemTokens": "ICP 生态代币",
+    "followUs": "关注我们"
+  },
+  "sidebar": {
+    "home": "首页",
+    "news_flash": "快讯"
+  },
+  "news": {
+    "latest": "最新新闻",
+    "trending": "热门",
+    "categories": "分类",
+    "readMore": "阅读更多",
+    "publishedOn": "发布于"
+  },
+  "market": {
+    "price": "价格",
+    "change": "涨跌幅",
+    "marketCap": "市值",
+    "volume": "交易量",
+    "high24h": "24小时最高",
+    "low24h": "24小时最低"
+  },
+  "settings": {
+    "theme": "主题",
+    "darkMode": "深色模式",
+    "lightMode": "浅色模式",
+    "language": "语言",
+    "notifications": "通知"
+  }
+}

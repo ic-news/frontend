@@ -1,6 +1,7 @@
 import React, { createContext, useContext, useEffect, useState } from "react";
 import RightSidebar from "../components/RightSidebar";
 import Sidebar from "../components/Sidebar";
+import { useCommonContext } from "./CommonContext";
 interface ThemeContextType {
   darkMode: boolean;
   toggleDarkMode: () => void;
@@ -10,6 +11,7 @@ interface ThemeContextType {
 const ThemeContext = createContext<ThemeContextType | undefined>(undefined);
 
 export const ThemeProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
+  const { language } = useCommonContext();
   const [darkMode, setDarkMode] = useState(() => {
     // Try to get the theme from localStorage
     const savedTheme = localStorage.getItem("theme");
@@ -47,7 +49,9 @@ export const ThemeProvider: React.FC<{ children: React.ReactNode }> = ({ childre
   return (
     <ThemeContext.Provider value={value}>
       <Sidebar />
-      <main className={`bg-[var(--bg-color-secondary)] w-full`}>{children}</main>
+      <main key={language?.language_code} className={`bg-[var(--bg-color-secondary)] w-full`}>
+        {children}
+      </main>
       <RightSidebar />
     </ThemeContext.Provider>
   );

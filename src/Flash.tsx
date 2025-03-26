@@ -9,6 +9,7 @@ import { format, formatDistance } from "date-fns";
 import { formatInTimeZone } from "date-fns-tz";
 import { ChevronUp } from "lucide-react";
 import * as React from "react";
+import { useTranslation } from "react-i18next";
 import InfiniteScroll from "react-infinite-scroll-component";
 import { Link } from "react-router-dom";
 import { useCommonContext } from "./context/CommonContext";
@@ -38,7 +39,8 @@ function FlashNews({
   activeTab: string;
   setActiveTab: (tab: string) => void;
 }) {
-  const { language } = useCommonContext();
+  const { i18n } = useTranslation();
+  const { language, currentLocale } = useCommonContext();
   const { news, loadNextPage, hasNextPage } = useFeeds();
   const { hasPermission, requestPermission, sendNotification } = useNotification();
   React.useEffect(() => {
@@ -101,7 +103,10 @@ function FlashNews({
       ) : (
         <>
           <div className="flex-none text-lg font-bold text-[var(--text-color-primary)] py-3 px-3 md:py-4 md:px-6">
-            {news[0]?.created_at && format(Number(news[0].created_at), "MMMM dd EEEE")}
+            {news[0]?.created_at &&
+              format(Number(news[0].created_at), "MMMM dd EEEE", {
+                locale: currentLocale,
+              })}
           </div>
           <InfiniteScroll
             dataLength={news.length}
