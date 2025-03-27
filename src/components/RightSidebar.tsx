@@ -37,10 +37,7 @@ export function ICEcosystemTokens() {
                 >
                   {token.symbol}
                   <CountUp
-                    className={classNames(
-                      "text-xs",
-                      change24_usd > 0 ? "text-[var(--green)]" : "text-[var(--red)]"
-                    )}
+                    className={classNames("text-xs text-black")}
                     end={new BigNumber(usd).toNumber()}
                     decimals={decimals}
                     prefix="$"
@@ -125,12 +122,7 @@ export function MarketOverview() {
                 <div className="text-xs text-[var(--text-color-secondary)]">{listing.name}</div>
               </div>
             </div>
-            <div
-              className={classNames(
-                "text-right",
-                listing.quote.percent_change_24h > 0 ? "text-[var(--green)]" : "text-[var(--red)]"
-              )}
-            >
+            <div className={classNames("text-right text-black")}>
               <CountUp
                 className={"text-sm"}
                 end={new BigNumber(listing.quote.price).toNumber()}
